@@ -4,7 +4,7 @@ import { Header } from '../components/Header';
 
 export const metadata = {
   title: 'Burgerito • Catalogue',
-  description: 'Application e-commerce Burgerito (Sprint 1)'
+  description: 'Application e-commerce Burgerito'
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
@@ -16,7 +16,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           {children}
         </main>
         <footer className="text-center text-xs py-10 opacity-50">
-          Sprint 1 • Burgerito
+          Burgerito
         </footer>
       </body>
     </html>
