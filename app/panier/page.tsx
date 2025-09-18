@@ -5,17 +5,12 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Product } from '../../types/product'
-
-interface CartItem {
-  product: Product
-  quantity: number
-}
+import { useCart } from '../../contexts/CartContext'
 
 export default function CartPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
-  const [cartItems, setCartItems] = useState<CartItem[]>([])
+  const { cartItems, updateQuantity, removeFromCart, getTotalPrice, clearCart } = useCart()
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -25,39 +20,9 @@ export default function CartPage() {
     }
 
     if (status === 'authenticated') {
-      // Load cart from localStorage for now (will be replaced with server actions)
-      const savedCart = localStorage.getItem('cart')
-      if (savedCart) {
-        setCartItems(JSON.parse(savedCart))
-      }
       setLoading(false)
     }
   }, [status, router])
-
-  const updateQuantity = (productId: string, newQuantity: number) => {
-    if (newQuantity <= 0) {
-      removeItem(productId)
-      return
-    }
-
-    const updatedCart = cartItems.map(item =>
-      item.product.id === productId
-        ? { ...item, quantity: newQuantity }
-        : item
-    )
-    setCartItems(updatedCart)
-    localStorage.setItem('cart', JSON.stringify(updatedCart))
-  }
-
-  const removeItem = (productId: string) => {
-    const updatedCart = cartItems.filter(item => item.product.id !== productId)
-    setCartItems(updatedCart)
-    localStorage.setItem('cart', JSON.stringify(updatedCart))
-  }
-
-  const getTotalPrice = () => {
-    return cartItems.reduce((total, item) => total + (item.product.price * item.quantity), 0)
-  }
 
   if (loading) {
     return <div className="text-center py-8">Chargement...</div>
@@ -80,7 +45,15 @@ export default function CartPage() {
 
   return (
     <div className="max-w-4xl mx-auto">
-      <h1 className="text-2xl font-bold mb-8">Mon Panier</h1>
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-2xl font-bold">Mon Panier</h1>
+        <button
+          onClick={clearCart}
+          className="text-red-400 hover:text-red-300 text-sm font-medium"
+        >
+          Vider le panier
+        </button>
+      </div>
       
       <div className="space-y-6">
         {cartItems.map((item) => (
@@ -122,7 +95,7 @@ export default function CartPage() {
               <div className="text-right">
                 <p className="font-semibold">{(item.product.price * item.quantity).toFixed(2)} €</p>
                 <button
-                  onClick={() => removeItem(item.product.id)}
+                  onClick={() => removeFromCart(item.product.id)}
                   className="text-red-400 hover:text-red-300 text-sm mt-1"
                 >
                   Supprimer

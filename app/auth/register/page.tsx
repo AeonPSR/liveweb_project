@@ -9,6 +9,7 @@ const API_BASE = 'https://node-eemi.vercel.app'
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
+    name: '',
     email: '',
     password: '',
     confirmPassword: ''
@@ -36,6 +37,7 @@ export default function RegisterPage() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          name: formData.name,
           email: formData.email,
           password: formData.password,
         }),
@@ -71,6 +73,20 @@ export default function RegisterPage() {
         <h1 className="text-2xl font-bold text-center mb-6">Inscription</h1>
         
         <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label htmlFor="name" className="block text-sm font-medium mb-2">
+              Nom
+            </label>
+            <input
+              type="text"
+              id="name"
+              required
+              value={formData.name}
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              className="w-full px-3 py-2 bg-neutral-800 border border-neutral-700 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-500"
+            />
+          </div>
+          
           <div>
             <label htmlFor="email" className="block text-sm font-medium mb-2">
               Email

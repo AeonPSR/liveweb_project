@@ -3,9 +3,12 @@
 import Link from 'next/link';
 import React from 'react';
 import { useSession, signOut } from 'next-auth/react';
+import { useCart } from '../contexts/CartContext';
 
 export function Header() {
   const { data: session, status } = useSession();
+  const { getTotalQuantity } = useCart();
+  const cartCount = getTotalQuantity();
 
   return (
     <header className="border-b border-neutral-800 sticky top-0 backdrop-blur bg-neutral-950/70 z-10">
@@ -14,7 +17,14 @@ export function Header() {
           <Link href="/" className="font-black text-xl tracking-wide">BURGERITO</Link>
           <nav className="flex gap-6 text-sm">
             <Link href="/">Catalogue</Link>
-            <Link href="/panier">Panier</Link>
+            <Link href="/panier" className="relative">
+              Panier
+              {cartCount > 0 && (
+                <span className="absolute -top-2 -right-6 bg-brand-500 text-neutral-900 text-xs font-bold rounded-full min-w-[1.25rem] h-5 flex items-center justify-center px-1">
+                  {cartCount}
+                </span>
+              )}
+            </Link>
           </nav>
         </div>
         

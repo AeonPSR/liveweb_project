@@ -5,6 +5,8 @@ import Image from 'next/image';
 import { Product } from '../types/product';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import { useCart } from '../contexts/CartContext';
+import { useState } from 'react';
 
 interface ProductCardProps {
   product: Product;
@@ -13,33 +15,28 @@ interface ProductCardProps {
 export function ProductCard({ product }: ProductCardProps) {
   const unavailable = product.isAvailable === false;
   const { data: session } = useSession();
+  const { addToCart } = useCart();
   const router = useRouter();
+  const [isAdding, setIsAdding] = useState(false);
 
-  const addToCart = () => {
+  const handleAddToCart = async (event: React.MouseEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+    
     if (!session) {
       router.push('/auth/login?callbackUrl=/');
       return;
     }
 
-    // Get current cart from localStorage
-    const currentCart = JSON.parse(localStorage.getItem('cart') || '[]');
+    if (isAdding) return; // Prevent double-clicks
+
+    setIsAdding(true);
+    addToCart(product);
     
-    // Check if product already exists in cart
-    const existingItemIndex = currentCart.findIndex((item: any) => item.product.id === product.id);
-    
-    if (existingItemIndex >= 0) {
-      // Update quantity
-      currentCart[existingItemIndex].quantity += 1;
-    } else {
-      // Add new item
-      currentCart.push({ product, quantity: 1 });
-    }
-    
-    // Save back to localStorage
-    localStorage.setItem('cart', JSON.stringify(currentCart));
-    
-    // Optional: Show some feedback (you could add a toast notification here)
-    console.log('Product added to cart:', product.name);
+    // Brief delay to prevent rapid clicking and show feedback
+    setTimeout(() => {
+      setIsAdding(false);
+    }, 300);
   };
 
   return (
@@ -67,12 +64,12 @@ export function ProductCard({ product }: ProductCardProps) {
         </div>
         <div className="mt-auto flex gap-2 items-center">
           <button
-            disabled={unavailable}
-            onClick={addToCart}
+            disabled={unavailable || isAdding}
+            onClick={handleAddToCart}
             className="text-xs font-medium rounded-md px-3 py-2 bg-brand-500 text-neutral-900 hover:bg-brand-400 disabled:bg-neutral-800 disabled:text-neutral-500 disabled:cursor-not-allowed transition-colors"
             aria-label={unavailable ? 'Produit indisponible' : 'Ajouter au panier'}
           >
-            Ajouter au panier
+            {isAdding ? 'Ajout...' : 'Ajouter au panier'}
           </button>
         </div>
       </div>
