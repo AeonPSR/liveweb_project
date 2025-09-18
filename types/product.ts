@@ -1,10 +1,10 @@
 export interface Product {
   id: string;
-  title: string;
+  name: string; // API returns 'name' instead of 'title'
   description: string;
-  image: string;
+  imageUrl: string; // API returns 'imageUrl' instead of 'image'
   price: number;
-  available?: boolean; // indicates if product can be added to cart
+  isAvailable?: boolean; // API returns 'isAvailable' instead of 'available'
   createdAt?: string;
   updatedAt?: string;
 }

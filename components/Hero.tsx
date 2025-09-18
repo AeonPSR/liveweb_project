@@ -10,11 +10,10 @@ export function Hero() {
           alt="Burgerito Hero"
           fill
           priority
-          className="object-cover opacity-70"
+          className="object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-tr from-neutral-950/90 via-neutral-950/30 to-neutral-900/10" />
       </div>
-      <div className="relative z-10 px-8 py-14 md:py-16 max-w-3xl">
+      <div className="relative z-10 px-8 md:py-48">
         {/* Keeping an accessible heading for SEO while hiding visual duplicate text */}
         <h1 className="sr-only">BURGERITO</h1>
         {/**
