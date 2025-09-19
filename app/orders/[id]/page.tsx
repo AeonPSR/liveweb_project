@@ -140,7 +140,7 @@ export default function OrderPage({ params }: OrderPageProps) {
     return (
       <div className="text-center py-16">
         <h1 className="text-2xl font-bold mb-4">Commande introuvable</h1>
-        <p className="text-neutral-400 mb-8">{error || 'Cette commande n\'existe pas ou vous n\'y avez pas accès.'}</p>
+        <p className="text-neutral-400 mb-8">{error || 'Cette commande n&apos;existe pas ou vous n&apos;y avez pas accès.'}</p>
         <Link 
           href="/profile" 
           className="inline-block bg-brand-500 text-neutral-900 font-medium py-2 px-6 rounded-md hover:bg-brand-400 transition-colors"
