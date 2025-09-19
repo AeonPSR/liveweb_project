@@ -112,7 +112,7 @@ export default function ProfilePage() {
         {orders.length === 0 ? (
           <div className="text-center py-16">
             <h3 className="text-lg font-semibold mb-2">Aucune commande</h3>
-            <p className="text-neutral-400 mb-6">Vous n'avez pas encore passé de commande.</p>
+            <p className="text-neutral-400 mb-6">Vous n&apos;avez pas encore passé de commande.</p>
             <Link 
               href="/" 
               className="inline-block bg-brand-500 text-neutral-900 font-medium py-2 px-6 rounded-md hover:bg-brand-400 transition-colors"
