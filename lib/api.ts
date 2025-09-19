@@ -1,4 +1,5 @@
 import { Product } from '../types/product';
+import { Order, OrderDetail, OrderListResponse } from '../types/order';
 
 const API_BASE = 'https://node-eemi.vercel.app';
 
@@ -29,5 +30,33 @@ export async function getProduct(id: string): Promise<Product | null> {
     return await fetchJSON<Product>(`/api/products/${id}`);
   } catch (e) {
     return null; // caller will handle notFound
+  }
+}
+
+// Order API functions
+export async function getUserOrders(accessToken: string): Promise<Order[]> {
+  try {
+    const response = await fetchJSON<OrderListResponse>('/api/orders/me', {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
+      }
+    });
+    return response.items;
+  } catch (e) {
+    console.error('Failed to fetch user orders:', e);
+    return [];
+  }
+}
+
+export async function getOrderDetail(orderId: string, accessToken: string): Promise<OrderDetail | null> {
+  try {
+    return await fetchJSON<OrderDetail>(`/api/orders/${orderId}`, {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
+      }
+    });
+  } catch (e) {
+    console.error('Failed to fetch order detail:', e);
+    return null;
   }
 }

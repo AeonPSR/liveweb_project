@@ -12,6 +12,7 @@ export default function CartPage() {
   const router = useRouter()
   const { cartItems, updateQuantity, removeFromCart, getTotalPrice, clearCart } = useCart()
   const [loading, setLoading] = useState(true)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -23,6 +24,52 @@ export default function CartPage() {
       setLoading(false)
     }
   }, [status, router])
+
+  const handleSubmitOrder = async () => {
+    if (cartItems.length === 0) return
+    
+    setIsSubmitting(true)
+    try {
+      // Extract product IDs for the API
+      const productIds = cartItems.flatMap(item => 
+        Array(item.quantity).fill(item.product.id)
+      )
+      
+      // Call the orders API
+      const response = await fetch('https://node-eemi.vercel.app/api/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session?.accessToken}`
+        },
+        body: JSON.stringify({ items: productIds })
+      })
+      
+      if (!response.ok) {
+        throw new Error('Failed to submit order')
+      }
+      
+      const result = await response.json()
+      console.log('Order submitted:', result)
+      
+      // Clear cart after successful order
+      clearCart()
+      
+      // Redirect to order detail page instead of showing alert
+      if (result.order?.id) {
+        router.push(`/orders/${result.order.id}`)
+      } else {
+        // Fallback to profile page if no order ID
+        alert('Commande passée avec succès !')
+        router.push('/profile')
+      }
+    } catch (error) {
+      console.error('Failed to submit order:', error)
+      alert('Erreur lors de la commande. Veuillez réessayer.')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
 
   if (loading) {
     return <div className="text-center py-8">Chargement...</div>
@@ -112,8 +159,12 @@ export default function CartPage() {
           <span className="text-xl font-bold text-brand-400">{getTotalPrice().toFixed(2)} €</span>
         </div>
         
-        <button className="w-full bg-brand-500 text-neutral-900 font-medium py-3 px-6 rounded-md hover:bg-brand-400 transition-colors">
-          Procéder au paiement
+        <button 
+          onClick={handleSubmitOrder}
+          disabled={isSubmitting || cartItems.length === 0}
+          className="w-full bg-brand-500 text-neutral-900 font-medium py-3 px-6 rounded-md hover:bg-brand-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {isSubmitting ? 'Commande en cours...' : 'Procéder au paiement'}
         </button>
       </div>
     </div>

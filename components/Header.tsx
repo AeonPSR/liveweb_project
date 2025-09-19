@@ -19,12 +19,15 @@ export function Header() {
             <Link href="/">Catalogue</Link>
             <Link href="/panier" className="relative">
               Panier
-              {cartCount > 0 && (
+              {session && cartCount > 0 && (
                 <span className="absolute -top-2 -right-6 bg-brand-500 text-neutral-900 text-xs font-bold rounded-full min-w-[1.25rem] h-5 flex items-center justify-center px-1">
                   {cartCount}
                 </span>
               )}
             </Link>
+            {session && (
+              <Link href="/profile">Profil</Link>
+            )}
           </nav>
         </div>
         
