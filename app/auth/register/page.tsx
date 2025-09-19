@@ -45,7 +45,7 @@ export default function RegisterPage() {
 
       if (!response.ok) {
         const errorData = await response.json()
-        throw new Error(errorData.message || 'Erreur lors de l\'inscription')
+        throw new Error(errorData.message || 'Erreur lors de l&apos;inscription')
       }
 
       // Auto-login after successful registration
@@ -61,7 +61,7 @@ export default function RegisterPage() {
         router.push('/')
       }
     } catch (error) {
-      setError(error instanceof Error ? error.message : 'Erreur lors de l\'inscription')
+      setError(error instanceof Error ? error.message : 'Erreur lors de l&apos;inscription')
     } finally {
       setLoading(false)
     }
@@ -140,7 +140,7 @@ export default function RegisterPage() {
             disabled={loading}
             className="w-full bg-brand-500 text-neutral-900 font-medium py-2 px-4 rounded-md hover:bg-brand-400 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
-            {loading ? 'Inscription...' : 'S\'inscrire'}
+            {loading ? 'Inscription...' : 'S&apos;inscrire'}
           </button>
         </form>
 
