@@ -70,7 +70,8 @@ const handler = NextAuth({
   },
   session: {
     strategy: 'jwt'
-  }
+  },
+  secret: process.env.NEXTAUTH_SECRET,
 })
 
 export { handler as GET, handler as POST }
