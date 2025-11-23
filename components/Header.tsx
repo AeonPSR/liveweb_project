@@ -28,6 +28,7 @@ export function Header() {
             {session && (
               <Link href="/profile">Profil</Link>
             )}
+            <Link href="/admin" className="text-neutral-500 hover:text-brand-400">Admin</Link>
           </nav>
         </div>
         

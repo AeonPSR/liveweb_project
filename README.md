@@ -1,58 +1,59 @@
-# Burgerito – Sprint 1
+# Burgerito
 
-Squelette initial de l'application e‑commerce Burgerito (Next.js App Router + TypeScript + Tailwind CSS).
+Application e-commerce de burgers avec fonctionnalités temps réel (Next.js 14 + TypeScript + Tailwind CSS).
 
-## Objectifs Sprint 1
-- Structure App Router + layout (header, liens).
-- Accueil avec liste des produits depuis l'API distante.
-- Page détail produit `/product/[id]`.
-- Gestion 404 + états de chargement.
+## Fonctionnalités
+- Catalogue produits avec détails
+- Authentification (NextAuth)
+- Panier et gestion commandes
+- Chat support temps réel (WebSocket)
+- Suivi commande en direct (SSE) (Demo avec un changement d'état automatisée)
 
 ## Stack
 - Next.js 14 (App Router)
-- TypeScript strict
+- TypeScript
 - Tailwind CSS
+- WebSocket (ws)
+- NextAuth
 
-## API
-Base URL: `https://node-eemi.vercel.app`
-
-Endpoints utilisés:
-- `GET /products` – liste des produits
-- `GET /products/:id` – détail produit
-
-### Mode local temporaire
-L'API étant indisponible actuellement, le catalogue utilise une **seed locale** (`data/products.ts`) avec 7 produits fictifs et des images PNG sous `public/img/burger` (ex: `burger1.png`). Le hero utilise `public/img/hero.png`. Retirer cette seed et réactiver les appels `listProducts()` dans `app/page.tsx` lorsque l'API sera opérationnelle.
-
-## Démarrage (développement)
+## Installation
 ```bash
 npm install
 npm run dev
 ```
-Ensuite ouvrir http://localhost:3000
+Ouvrir http://localhost:3000
 
-## Structure principale
+**Demo**: https://liveweb-project.vercel.app/
+
+## Structure
 ```
 app/
-  layout.tsx            # Layout global + Header
-  page.tsx              # Liste produits
-  loading.tsx           # Chargement racine
-  not-found.tsx         # Page 404
-  product/[id]/page.tsx # Détail produit
-  product/[id]/loading.tsx
+  auth/              # Login/Register
+  panier/            # Panier
+  orders/[id]/       # Détail commande + suivi SSE
+  profile/           # Profil utilisateur
+  api/
+    order-status/    # SSE endpoint
 components/
-  Header.tsx
-  ProductCard.tsx
-lib/
-  api.ts                # Fonctions fetch (ISR 60s)
-types/
-  product.ts
+  ChatSupport.tsx    # Chat client WebSocket
+  OrderStatusTracker.tsx  # Suivi commande SSE
+admin-support/       # Interface admin chat (HTML standalone)
+server.js            # Serveur custom Node + WebSocket
 ```
 
-## Prochaines étapes (Sprints futurs)
-- Authentification (NextAuth)
-- Panier & commande
-- WebSocket (chat + suivi commande)
-- Optimisations images & SEO supplémentaires
+## Chat Support
+Le chat utilise WebSocket pour la messagerie temps réel entre utilisateurs et support.
+
+**Admin**: Ouvrir `admin-support/index.html` dans un navigateur.
+
+## API
+Base URL: `https://node-eemi.vercel.app`
+
+Endpoints:
+- `GET /products` – liste produits
+- `GET /products/:id` – détail produit
+- `POST /api/orders` – créer commande
+- `GET /api/orders` – historique commandes
 
 ---
-> Projet pédagogique – M2 Temps Réel.
+> Projet M2 Web Temps Réel

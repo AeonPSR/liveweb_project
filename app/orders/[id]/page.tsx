@@ -7,6 +7,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { getOrderDetail } from '../../../lib/api'
 import { OrderDetail } from '../../../types/order'
+import { OrderStatusTracker } from '../../../components/OrderStatusTracker'
 
 interface OrderPageProps {
   params: { id: string }
@@ -174,6 +175,9 @@ export default function OrderPage({ params }: OrderPageProps) {
       </div>
 
       <div className="space-y-6">
+        {/* Order Status Tracker */}
+        <OrderStatusTracker orderId={params.id} />
+
         <div className="bg-neutral-900/40 border border-neutral-800 rounded-xl p-6">
           <h2 className="text-lg font-semibold mb-4">Articles commandés</h2>
           <div className="space-y-4">
