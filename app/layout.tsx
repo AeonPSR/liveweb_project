@@ -2,6 +2,7 @@ import './globals.css';
 import type { ReactNode } from 'react';
 import { Header } from '../components/Header';
 import { Providers } from '../components/Providers';
+import { ChatSupport } from '../components/ChatSupport';
 
 export const metadata = {
   title: 'Burgerito • Catalogue',
@@ -20,6 +21,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <footer className="text-center text-xs py-10 opacity-50">
             Burgerito
           </footer>
+          <ChatSupport />
         </Providers>
       </body>
     </html>
